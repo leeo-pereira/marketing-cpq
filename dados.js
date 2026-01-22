@@ -1,3 +1,5 @@
+// PRODUTOS
+
 const produtos = [
     { 
       "id_produto": "orcamento", 
@@ -99,6 +101,8 @@ const produtos = [
     } 
 ]
 
+// MODELO DE CAMPANHA
+
 const campanha = [
   { 
   "id_campanha": "", 
@@ -110,6 +114,8 @@ const campanha = [
 } 
 ]
 
+// MODELO DE OFERTA (COMBO)
+
 const oferta = [
   { 
   "id_oferta": null, 
@@ -120,6 +126,8 @@ const oferta = [
   "itens": [] 
 }  
 ]
+
+// MODELO DE ITEM EM OFERTA
 
 const item_oferta = [
   { 
