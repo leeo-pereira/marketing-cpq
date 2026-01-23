@@ -3,14 +3,1046 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketing CPQ</title>
-    <link rel="stylesheet" href="style.css">
-    
+    <title>CPQ OrçaFascio - Gestão de Campanhas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* Sistema de Abas */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #ecf0f1;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            color: #7f8c8d;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #2c3e50;
+        }
+
+        .tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+
+        /* Telas (Painéis) */
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        button.secondary {
+            background: #95a5a6;
+        }
+
+        button.secondary:hover {
+            background: #7f8c8d;
+        }
+
+        button.danger {
+            background: #e74c3c;
+        }
+
+        button.danger:hover {
+            background: #c0392b;
+        }
+
+        button.success {
+            background: #27ae60;
+        }
+
+        button.success:hover {
+            background: #229954;
+        }
+
+        button.small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Alertas */
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Listas */
+        .list-item {
+            padding: 12px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-content {
+            flex: 1;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #3498db;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .badge.success {
+            background: #27ae60;
+        }
+
+        .badge.warning {
+            background: #f39c12;
+        }
+
+        /* Cards de Público */
+        .publico-card {
+            background: #fff;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .publico-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .publico-title {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* Oferta dentro do público */
+        .oferta-item {
+            background: #f8f9fa;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .oferta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .oferta-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Itens da oferta */
+        .item-oferta {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+
+        .item-oferta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .desconto-destaque {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* Tabela com cara de software profissional */
+        .tabela-cpq { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            background: white; 
+        }
+        
+        .tabela-cpq th { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 12px; 
+            text-align: left; 
+            font-size: 13px; 
+        }
+        
+        .tabela-cpq td { 
+            padding: 12px; 
+            border-bottom: 1px solid #eee; 
+            vertical-align: top; 
+            font-size: 13px; 
+        }
+
+        /* Divisor entre ofertas diferentes */
+        .divisor-oferta { 
+            border-top: 3px solid #2c3e50 !important; 
+        }
+
+        /* Destaque de Combo */
+        .linha-combo { 
+            border-left: 6px solid #3498db !important; 
+            background-color: #f7faff; 
+        }
+
+        .badge-combo { 
+            background: #3498db; 
+            color: white; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-size: 9px; 
+            font-weight: bold; 
+        }
+        
+        .badge-brinde { 
+            background: #27ae60; 
+            color: white; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-weight: bold; 
+        }
+
+        .filtros-tabela {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .filtros-tabela label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .filtros-tabela select {
+            width: auto;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-<div id="teste-dados">
+    <div class="container">
+        <h1>🎯 CPQ OrçaFascio</h1>
+        <p class="subtitle">Sistema de Gestão de Campanhas de Vendas</p>
+
+        <!-- SISTEMA DE ABAS -->
+        <div class="tabs">
+            <button class="tab active" onclick="mostrarAba(event, 'campanha')">1. Campanha</button>
+            <button class="tab" onclick="mostrarAba(event, 'publicos')">2. Públicos</button>
+            <button class="tab" onclick="mostrarAba(event, 'ofertas')">3. Ofertas</button>
+            <button class="tab" onclick="mostrarAba(event, 'visualizar')">4. Visualizar Tudo</button>
+        </div>
+
+        <!-- PAINEL 1: CAMPANHA -->
+        <div id="campanha" class="panel active">
+            <h2>📅 Configurar Campanha</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Defina nome e vigência da campanha</p>
+
+            <div id="campanha-info"></div>
+
+            <form id="form-campanha" onsubmit="salvarCampanha(event)">
+                <div class="form-group">
+                    <label>Nome da Campanha</label>
+                    <input type="text" id="nome_campanha" placeholder="Ex: Campanha Janeiro 2026" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data Início</label>
+                        <input type="date" id="vigencia_inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Fim</label>
+                        <input type="date" id="vigencia_fim" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observações Gerais (opcional)</label>
+                    <textarea id="observacoes_gerais" placeholder="Ex: Condições não se aplicam a órgãos públicos"></textarea>
+                </div>
+
+                <button type="submit">Salvar Campanha</button>
+                <button type="button" class="danger" onclick="resetarSistema()" style="float: right;">🗑️ Limpar Sistema</button>
+            </form>
+        </div>
+
+        <!-- PAINEL 2: PÚBLICOS -->
+        <div id="publicos" class="panel">
+            <h2>👥 Gerenciar Públicos</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Crie os públicos da campanha (Renovação, Upsell, etc.)</p>
+
+            <div id="lista-publicos"></div>
+
+            <h3>Adicionar Novo Público</h3>
+            <form id="form-publico" onsubmit="adicionarPublico(event)">
+                <div class="form-group">
+                    <label>Nome do Público</label>
+                    <input type="text" id="nome_publico" placeholder="Ex: Renovação e Antecipação" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição (opcional)</label>
+                    <textarea id="descricao_publico" placeholder="Ex: Clientes com contrato vencendo nos próximos 60 dias"></textarea>
+                </div>
+
+                <button type="submit">Adicionar Público</button>
+            </form>
+        </div>
+
+        <!-- PAINEL 3: OFERTAS -->
+        <div id="ofertas" class="panel">
+            <h2>🎁 Gerenciar Ofertas e Itens</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Crie ofertas dentro de cada público e adicione produtos</p>
+
+            <div id="conteudo-ofertas"></div>
+        </div>
+
+        <!-- PAINEL 4: VISUALIZAR -->
+        <div id="visualizar" class="panel">
+            <h2>📊 Visualização Completa</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Tabela consolidada de toda a campanha</p>
+
+            <div class="filtros-tabela">
+                <label>Filtrar por Tipo:</label>
+                <select id="filtro-tipo" onchange="renderizarTabelaFinal()">
+                    <option value="todos">Todos os Itens</option>
+                    <option value="modulo">Apenas Módulos</option>
+                    <option value="plugin">Apenas Plugins</option>
+                </select>
+            </div>
+
+            <button onclick="exportarCSV()" style="margin-bottom: 20px;">📥 Exportar para CSV</button>
+
+            <div id="tabela-final"></div>
+        </div>
     </div>
-    <script src="dados.js"></script>
-    <script src="script.js"></script>
+
+    <script>
+        // ============================================
+        // PRODUTOS (CATÁLOGO)
+        // ============================================
+        const produtos = [
+            { id_produto: "orcamento", nome_produto: "Orçamento de Obras", tipo: "modulo", preco_nominal: 1099 },
+            { id_produto: "bases", nome_produto: "Bases de Composições", tipo: "modulo", preco_nominal: 1099 },
+            { id_produto: "gestao", nome_produto: "Gestão de Base Própria", tipo: "modulo", preco_nominal: 599 },
+            { id_produto: "cde", nome_produto: "OF CDE", tipo: "modulo", preco_nominal: 1999 },
+            { id_produto: "planejamento", nome_produto: "Planejamento", tipo: "modulo", preco_nominal: 1099 },
+            { id_produto: "medicao", nome_produto: "OF Medição", tipo: "modulo", preco_nominal: 1099 },
+            { id_produto: "compras", nome_produto: "Compras", tipo: "modulo", preco_nominal: 1099 },
+            { id_produto: "diario", nome_produto: "Diário de Obras", tipo: "modulo", preco_nominal: 1099 },
+            { id_produto: "orcabim", nome_produto: "OrçaBIM para Revit", tipo: "plugin", preco_nominal: 1199 },
+            { id_produto: "civil3d", nome_produto: "OrçaBIM para Civil 3D", tipo: "plugin", preco_nominal: 1099 },
+            { id_produto: "eletrico", nome_produto: "OF Elétrico", tipo: "plugin", preco_nominal: 1199 },
+            { id_produto: "hidraulico", nome_produto: "OF Hidráulico", tipo: "plugin", preco_nominal: 1199 },
+            { id_produto: "estrutural", nome_produto: "OF Estrutural", tipo: "plugin", preco_nominal: 1199 },
+            { id_produto: "ofbi", nome_produto: "OF BI", tipo: "plugin", preco_nominal: 3999 }
+        ];
+
+        // ============================================
+        // ESTADO GLOBAL
+        // ============================================
+        let campanha = {
+            nome_campanha: '',
+            vigencia_inicio: '',
+            vigencia_fim: '',
+            observacoes_gerais: '',
+            publicos: []
+        };
+
+        // ============================================
+        // SISTEMA DE ABAS
+        // ============================================
+        function mostrarAba(event, nomeAba) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(nomeAba).classList.add('active');
+            if (event) event.currentTarget.classList.add('active');
+            
+            if (nomeAba === 'publicos') renderizarPublicos();
+            if (nomeAba === 'ofertas') renderizarOfertas();
+            if (nomeAba === 'visualizar') renderizarTabelaFinal();
+        }
+
+        // ============================================
+        // GESTÃO DE CAMPANHA
+        // ============================================
+        function salvarCampanha(event) {
+            event.preventDefault();
+            campanha.nome_campanha = document.getElementById('nome_campanha').value;
+            campanha.vigencia_inicio = document.getElementById('vigencia_inicio').value;
+            campanha.vigencia_fim = document.getElementById('vigencia_fim').value;
+            campanha.observacoes_gerais = document.getElementById('observacoes_gerais').value;
+            
+            salvarNoLocalStorage();
+            mostrarInfoCampanha();
+            alert('✅ Campanha salva com sucesso!');
+        }
+
+        function mostrarInfoCampanha() {
+            const info = document.getElementById('campanha-info');
+            if (campanha.nome_campanha) {
+                info.innerHTML = `
+                    <div class="alert success">
+                        <strong>Campanha Ativa:</strong> ${campanha.nome_campanha}<br>
+                        <strong>Vigência:</strong> ${formatarData(campanha.vigencia_inicio)} até ${formatarData(campanha.vigencia_fim)}
+                    </div>
+                `;
+            }
+        }
+
+        function resetarSistema() {
+            if (confirm("⚠️ Isso vai apagar TUDO! Tem certeza?")) {
+                localStorage.removeItem('cpq_campanha');
+                location.reload();
+            }
+        }
+
+        // ============================================
+        // GESTÃO DE PÚBLICOS
+        // ============================================
+        function adicionarPublico(event) {
+            event.preventDefault();
+            if (!campanha.nome_campanha) {
+                alert('⚠️ Configure a campanha primeiro!');
+                return;
+            }
+            
+            const novoPublico = {
+                id_publico: Date.now().toString(),
+                nome_publico: document.getElementById('nome_publico').value,
+                descricao: document.getElementById('descricao_publico').value,
+                ofertas: []
+            };
+            
+            campanha.publicos.push(novoPublico);
+            salvarNoLocalStorage();
+            document.getElementById('form-publico').reset();
+            renderizarPublicos();
+        }
+
+        function renderizarPublicos() {
+            const lista = document.getElementById('lista-publicos');
+            if (campanha.publicos.length === 0) {
+                lista.innerHTML = '<div class="alert info">Nenhum público cadastrado ainda.</div>';
+                return;
+            }
+            lista.innerHTML = campanha.publicos.map(p => `
+                <div class="list-item">
+                    <div class="list-item-content">
+                        <strong>${p.nome_publico}</strong>
+                        ${p.descricao ? `<br><small style="color: #7f8c8d;">${p.descricao}</small>` : ''}
+                        <span class="badge">${p.ofertas.length} oferta(s)</span>
+                    </div>
+                    <button class="danger" onclick="removerPublico('${p.id_publico}')">Remover</button>
+                </div>
+            `).join('');
+        }
+
+        function removerPublico(id) {
+            if (confirm('Remover este público e todas as suas ofertas?')) {
+                campanha.publicos = campanha.publicos.filter(p => p.id_publico !== id);
+                salvarNoLocalStorage();
+                renderizarPublicos();
+            }
+        }
+
+        // ============================================
+        // GESTÃO DE OFERTAS
+        // ============================================
+        function renderizarOfertas() {
+            const conteudo = document.getElementById('conteudo-ofertas');
+            if (campanha.publicos.length === 0) {
+                conteudo.innerHTML = '<div class="alert info">Crie públicos primeiro na aba anterior!</div>';
+                return;
+            }
+            
+            conteudo.innerHTML = campanha.publicos.map(publico => `
+                <div class="publico-card">
+                    <div class="publico-header">
+                        <div class="publico-title">👥 ${publico.nome_publico}</div>
+                        <button class="success small" onclick="mostrarFormOferta('${publico.id_publico}')">+ Nova Oferta</button>
+                    </div>
+                    
+                    <div id="form-oferta-${publico.id_publico}" style="display: none; background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
+                        <h4 style="margin-bottom: 15px;">Nova Oferta</h4>
+                        <form onsubmit="adicionarOferta(event, '${publico.id_publico}')">
+                            <div class="form-group">
+                                <label>Nome da Oferta</label>
+                                <input type="text" id="nome_oferta_${publico.id_publico}" placeholder="Ex: Oferta 1 - Renovação Básica" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Base Aplicável (opcional)</label>
+                                <input type="text" id="base_aplicavel_${publico.id_publico}" placeholder="Ex: Clientes com Orçamento + Bases">
+                            </div>
+                            <div class="form-group">
+                                <label>Observações (opcional)</label>
+                                <textarea id="observacoes_oferta_${publico.id_publico}" placeholder="Ex: Desconto máximo para PIX"></textarea>
+                            </div>
+                            <button type="submit" class="success">Criar Oferta</button>
+                            <button type="button" class="secondary" onclick="cancelarFormOferta('${publico.id_publico}')">Cancelar</button>
+                        </form>
+                    </div>
+                    
+                    <div id="lista-ofertas-${publico.id_publico}">
+                        ${renderizarOfertasDoPublico(publico)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderizarOfertasDoPublico(publico) {
+            if (publico.ofertas.length === 0) {
+                return '<div class="alert info">Nenhuma oferta criada ainda.</div>';
+            }
+            
+            return publico.ofertas.map(oferta => `
+                <div class="oferta-item">
+                    <div class="oferta-header">
+                        <strong>🎁 ${oferta.nome_oferta}</strong>
+                        <div>
+                            <button class="success small" onclick="mostrarFormItem('${publico.id_publico}', '${oferta.id_oferta}')">+ Adicionar Item</button>
+                            <button class="danger small" onclick="removerOferta('${publico.id_publico}', '${oferta.id_oferta}')">Remover</button>
+                        </div>
+                    </div>
+                    
+                    ${oferta.base_aplicavel ? `<div style="color: #7f8c8d; font-size: 13px; margin-bottom: 8px;">📋 Base: ${oferta.base_aplicavel}</div>` : ''}
+                    ${oferta.observacoes ? `<div style="color: #7f8c8d; font-size: 13px; margin-bottom: 8px;">💬 ${oferta.observacoes}</div>` : ''}
+                    
+                    <div id="form-item-${oferta.id_oferta}" style="display: none; background: white; padding: 15px; border: 1px solid #ddd; border-radius: 4px; margin: 10px 0;">
+                        <h5 style="margin-bottom: 10px;">Adicionar Produto</h5>
+                        <form onsubmit="adicionarItem(event, '${publico.id_publico}', '${oferta.id_oferta}')">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Produto</label>
+                                    <select id="produto_${oferta.id_oferta}" onchange="toggleTipoBrinde('${oferta.id_oferta}')" required>
+                                        <option value="__brinde_generico__">-- Brinde Genérico --</option>
+                                        ${produtos.map(p => `<option value="${p.id_produto}">${p.nome_produto} (R$ ${p.preco_nominal})</option>`).join('')}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group" id="grp_tipo_brinde_${oferta.id_oferta}">
+                                    <label>Tipo de Brinde</label>
+                                    <select id="tipo_brinde_generico_${oferta.id_oferta}">
+                                        <option value="Módulo">Módulo</option>
+                                        <option value="Plugin">Plugin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Tipo de Ação</label>
+                                    <select id="tipo_acao_${oferta.id_oferta}" required>
+                                        <option value="desconto_percentual">Desconto Percentual (%)</option>
+                                        <option value="gratis">Grátis/Brinde</option>
+                                        <option value="desconto_valor">Desconto em Reais (R$)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Valor do Desconto</label>
+                                    <input type="number" id="valor_desconto_${oferta.id_oferta}" placeholder="Ex: 15 para 15%" step="0.01">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Vincular a Combo (opcional)</label>
+                                    <input type="text" id="combo_grp_${oferta.id_oferta}" placeholder="Ex: Combo Medição">
+                                </div>
+                                <div class="form-group">
+                                    <label>Condição/Exceção (opcional)</label>
+                                    <input type="text" id="condicao_${oferta.id_oferta}" placeholder="Ex: 2 ou mais usuários">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="success">Adicionar</button>
+                            <button type="button" class="secondary" onclick="cancelarFormItem('${oferta.id_oferta}')">Cancelar</button>
+                        </form>
+                    </div>
+                    
+                    <div class="itens-da-oferta" style="margin-top: 10px;">
+                        ${renderizarItensOferta(oferta)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderizarItensOferta(oferta) {
+            if (oferta.itens.length === 0) {
+                return '<small style="color: #7f8c8d;">Nenhum item adicionado.</small>';
+            }
+            
+            return oferta.itens.map((item, index) => {
+                const produto = produtos.find(p => p.id_produto === item.id_produto);
+                const nomeProduto = produto ? produto.nome_produto : `Brinde Genérico (${item.tipo_brinde || 'Módulo'})`;
+                
+                let textoDesconto = '';
+                if (item.tipo_acao === 'gratis') {
+                    textoDesconto = '<span class="badge-brinde">GRÁTIS</span>';
+                } else if (item.tipo_acao === 'desconto_percentual') {
+                    textoDesconto = `<span class="desconto-destaque">${item.valor}% OFF</span>`;
+                } else if (item.tipo_acao === 'desconto_valor') {
+                    textoDesconto = `<span class="desconto-destaque">R$ ${item.valor} OFF</span>`;
+                }
+                
+                return `
+                    <div class="item-oferta" style="border-left: 3px solid ${item.combo ? '#3498db' : '#27ae60'};">
+                        <div class="item-oferta-header">
+                            <div>
+                                <strong>${nomeProduto}</strong> ${textoDesconto}
+                                ${item.combo ? `<br><span class="badge-combo">${item.combo}</span>` : ''}
+                                ${item.condicao ? `<br><small style="color: #e67e22;">⚠️ ${item.condicao}</small>` : ''}
+                            </div>
+                            <button class="danger small" onclick="removerItem('${oferta.id_oferta}', ${index})">×</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // CONTROLE DE FORMULÁRIOS (OFERTAS E ITENS)
+        // ============================================
+        function mostrarFormOferta(id_publico) {
+            document.getElementById(`form-oferta-${id_publico}`).style.display = 'block';
+        }
+
+        function cancelarFormOferta(id_publico) {
+            document.getElementById(`form-oferta-${id_publico}`).style.display = 'none';
+        }
+
+        function adicionarOferta(event, id_publico) {
+            event.preventDefault();
+            
+            const publico = campanha.publicos.find(p => p.id_publico === id_publico);
+            
+            const novaOferta = {
+                id_oferta: Date.now().toString(),
+                nome_oferta: document.getElementById(`nome_oferta_${id_publico}`).value,
+                base_aplicavel: document.getElementById(`base_aplicavel_${id_publico}`).value,
+                observacoes: document.getElementById(`observacoes_oferta_${id_publico}`).value,
+                itens: []
+            };
+            
+            publico.ofertas.push(novaOferta);
+            salvarNoLocalStorage();
+            
+            cancelarFormOferta(id_publico);
+            renderizarOfertas();
+        }
+
+        function removerOferta(id_publico, id_oferta) {
+            if (confirm('Remover esta oferta e todos os seus itens?')) {
+                const publico = campanha.publicos.find(p => p.id_publico === id_publico);
+                publico.ofertas = publico.ofertas.filter(o => o.id_oferta !== id_oferta);
+                salvarNoLocalStorage();
+                renderizarOfertas();
+            }
+        }
+
+        function mostrarFormItem(id_publico, id_oferta) {
+            document.getElementById(`form-item-${id_oferta}`).style.display = 'block';
+            toggleTipoBrinde(id_oferta); // Inicializa o estado do campo
+        }
+
+        function cancelarFormItem(id_oferta) {
+            document.getElementById(`form-item-${id_oferta}`).style.display = 'none';
+        }
+
+        function toggleTipoBrinde(id_oferta) {
+            const selectProduto = document.getElementById(`produto_${id_oferta}`);
+            const grupoBrinde = document.getElementById(`grp_tipo_brinde_${id_oferta}`);
+            
+            if (selectProduto.value === '__brinde_generico__') {
+                // Brinde genérico - mostra o campo de tipo
+                grupoBrinde.style.display = 'block';
+            } else {
+                // Produto específico - esconde o campo de tipo
+                grupoBrinde.style.display = 'none';
+            }
+        }
+
+        function adicionarItem(event, id_publico, id_oferta) {
+            event.preventDefault();
+            
+            const publico = campanha.publicos.find(p => p.id_publico === id_publico);
+            const oferta = publico.ofertas.find(o => o.id_oferta === id_oferta);
+            
+            const produtoId = document.getElementById(`produto_${id_oferta}`).value;
+            
+            const novoItem = {
+                id_produto: produtoId,
+                tipo_brinde: produtoId === '' ? document.getElementById(`tipo_brinde_generico_${id_oferta}`).value : null,
+                tipo_acao: document.getElementById(`tipo_acao_${id_oferta}`).value,
+                valor: parseFloat(document.getElementById(`valor_desconto_${id_oferta}`).value) || 0,
+                condicao: document.getElementById(`condicao_${id_oferta}`).value,
+                combo: document.getElementById(`combo_grp_${id_oferta}`).value
+            };
+            
+            oferta.itens.push(novoItem);
+            salvarNoLocalStorage();
+            
+            cancelarFormItem(id_oferta);
+            renderizarOfertas();
+        }
+
+        function removerItem(id_oferta, index) {
+            if (confirm('Remover este item?')) {
+                campanha.publicos.forEach(publico => {
+                    const oferta = publico.ofertas.find(o => o.id_oferta === id_oferta);
+                    if (oferta) {
+                        oferta.itens.splice(index, 1);
+                    }
+                });
+                salvarNoLocalStorage();
+                renderizarOfertas();
+            }
+        }
+
+        // ============================================
+        // VISUALIZAÇÃO FINAL (TABELA)
+        // ============================================
+        function renderizarTabelaFinal() {
+            const tabela = document.getElementById('tabela-final');
+            const filtro = document.getElementById('filtro-tipo')?.value || 'todos';
+            let linhas = [];
+
+            campanha.publicos.forEach(publico => {
+                publico.ofertas.forEach(oferta => {
+                    oferta.itens.forEach(item => {
+                        const produto = produtos.find(p => p.id_produto === item.id_produto);
+                        
+                        // Determinar tipo e nome
+                        let tipo = '';
+                        let nomeProduto = '';
+                        
+                        if (produto) {
+                            tipo = produto.tipo;
+                            nomeProduto = produto.nome_produto;
+                        } else {
+                            tipo = (item.tipo_brinde || 'Módulo').toLowerCase();
+                            nomeProduto = `Brinde Genérico (${item.tipo_brinde || 'Módulo'})`;
+                        }
+                        
+                        // Aplicar filtro
+                        if (filtro === 'todos' || tipo === filtro) {
+                            const condicaoHtml = item.condicao ? `<div style="color:#e67e22; font-size:11px;">⚠️ ${item.condicao}</div>` : "";
+                            
+                            let desconto = '';
+                            if (item.tipo_acao === 'gratis') {
+                                desconto = '<span class="badge-brinde">GRÁTIS</span>';
+                            } else if (item.tipo_acao === 'desconto_percentual') {
+                                desconto = `${item.valor}%`;
+                            } else if (item.tipo_acao === 'desconto_valor') {
+                                desconto = `R$ ${item.valor}`;
+                            }
+                            
+                            linhas.push({
+                                publico: publico.nome_publico,
+                                oferta: oferta.nome_oferta,
+                                combo: item.combo,
+                                produtoHtml: `<strong>${nomeProduto}</strong>${condicaoHtml}`,
+                                tipo: tipo.charAt(0).toUpperCase() + tipo.slice(1),
+                                preco: produto ? `R$ ${produto.preco_nominal}` : '-',
+                                descontoHtml: desconto
+                            });
+                        }
+                    });
+                });
+            });
+
+            if (linhas.length === 0) {
+                tabela.innerHTML = '<div class="alert info">Nenhum item cadastrado ainda ou nenhum item corresponde ao filtro.</div>';
+                return;
+            }
+
+            let ultimaOferta = "";
+            tabela.innerHTML = `
+                <table class="tabela-cpq">
+                    <thead>
+                        <tr>
+                            <th>Público</th>
+                            <th>Oferta</th>
+                            <th>Produto / Exceção</th>
+                            <th>Tipo</th>
+                            <th>Preço</th>
+                            <th>Desconto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${linhas.map(linha => {
+                            const divisor = (ultimaOferta !== linha.oferta && ultimaOferta !== "") ? 'divisor-oferta' : '';
+                            ultimaOferta = linha.oferta;
+                            return `
+                                <tr class="${divisor} ${linha.combo ? 'linha-combo' : ''}">
+                                    <td>${linha.publico}</td>
+                                    <td><strong>${linha.oferta}</strong>${linha.combo ? `<br><span class="badge-combo">${linha.combo}</span>` : ''}</td>
+                                    <td>${linha.produtoHtml}</td>
+                                    <td>${linha.tipo}</td>
+                                    <td>${linha.preco}</td>
+                                    <td style="color:#27ae60; font-weight:bold;">${linha.descontoHtml}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // ============================================
+        // EXPORTAR CSV
+        // ============================================
+        function exportarCSV() {
+            let linhas = [];
+            
+            // Cabeçalho
+            linhas.push('Campanha;Vigência;Público;Oferta;Combo;Produto;Tipo;Preço;Desconto;Condição');
+            
+            // Dados
+            campanha.publicos.forEach(publico => {
+                publico.ofertas.forEach(oferta => {
+                    oferta.itens.forEach(item => {
+                        const produto = produtos.find(p => p.id_produto === item.id_produto);
+                        
+                        let nomeProduto = '';
+                        let tipo = '';
+                        let preco = '';
+                        
+                        if (produto) {
+                            nomeProduto = produto.nome_produto;
+                            tipo = produto.tipo.charAt(0).toUpperCase() + produto.tipo.slice(1);
+                            preco = `R$ ${produto.preco_nominal}`;
+                        } else {
+                            nomeProduto = `Brinde Genérico (${item.tipo_brinde || 'Módulo'})`;
+                            tipo = item.tipo_brinde || 'Módulo';
+                            preco = '-';
+                        }
+                        
+                        let desconto = '';
+                        if (item.tipo_acao === 'gratis') {
+                            desconto = 'GRÁTIS';
+                        } else if (item.tipo_acao === 'desconto_percentual') {
+                            desconto = `${item.valor}%`;
+                        } else if (item.tipo_acao === 'desconto_valor') {
+                            desconto = `R$ ${item.valor}`;
+                        }
+                        
+                        linhas.push([
+                            campanha.nome_campanha,
+                            `${formatarData(campanha.vigencia_inicio)} a ${formatarData(campanha.vigencia_fim)}`,
+                            publico.nome_publico,
+                            oferta.nome_oferta,
+                            item.combo || '-',
+                            nomeProduto,
+                            tipo,
+                            preco,
+                            desconto,
+                            item.condicao || '-'
+                        ].join(';'));
+                    });
+                });
+            });
+            
+            if (linhas.length === 1) {
+                alert('⚠️ Não há dados para exportar!');
+                return;
+            }
+            
+            // Criar arquivo e download
+            const csvContent = linhas.join('\n');
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `campanha_${campanha.nome_campanha.replace(/\s/g, '_')}.csv`;
+            link.click();
+            
+            alert('✅ CSV exportado com sucesso!');
+        }
+
+        // ============================================
+        // LOCAL STORAGE
+        // ============================================
+        function salvarNoLocalStorage() {
+            localStorage.setItem('cpq_campanha', JSON.stringify(campanha));
+        }
+
+        function carregarDoLocalStorage() {
+            const salvo = localStorage.getItem('cpq_campanha');
+            if (salvo) {
+                campanha = JSON.parse(salvo);
+                preencherFormularioCampanha();
+                mostrarInfoCampanha();
+            }
+        }
+
+        function preencherFormularioCampanha() {
+            if (campanha.nome_campanha) {
+                document.getElementById('nome_campanha').value = campanha.nome_campanha;
+                document.getElementById('vigencia_inicio').value = campanha.vigencia_inicio;
+                document.getElementById('vigencia_fim').value = campanha.vigencia_fim;
+                document.getElementById('observacoes_gerais').value = campanha.observacoes_gerais || '';
+            }
+        }
+
+        // ============================================
+        // UTILITÁRIOS
+        // ============================================
+        function formatarData(data) {
+            if (!data) return '';
+            const [ano, mes, dia] = data.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        window.onload = function() {
+            carregarDoLocalStorage();
+        };
+    </script>
 </body>
 </html>
